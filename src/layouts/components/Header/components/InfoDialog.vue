@@ -217,8 +217,14 @@ const handleUnbind = async (field: 'phone' | 'email') => {
   }
 };
 
-// 弹窗打开时初始化表单
-const openDialog = () => {
+// 弹窗打开时重新拉取最新 profile 并初始化表单
+const openDialog = async () => {
+  try {
+    const { data } = await getUserProfile();
+    userStore.setProfile(data);
+  } catch {
+    // 获取失败时仍使用 store 中的旧数据
+  }
   initForm();
   visible.value = true;
 };
